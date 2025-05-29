@@ -7,7 +7,14 @@ require 'sinatra'
 require 'sequel'
 
 # -------- DATABASE --------
-DB = Sequel.sqlite('cms.db')
+require 'fileutils'
+DB_PATH   = 'cms.db'
+SEED_PATH = File.expand_path('../db/cms_seed.db', __dir__)
+
+FileUtils.cp(SEED_PATH, DB_PATH) unless File.exist?(DB_PATH)
+
+DB = Sequel.sqlite(DB_PATH)
+
 
 DB.create_table?(:pages) do
   primary_key :id
